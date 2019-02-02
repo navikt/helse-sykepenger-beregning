@@ -16,10 +16,10 @@ class BeregningTest {
 
       val søknad = Søknad(fom)
 
-      val dagsats = 600L
+      val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-02")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, dagsats, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, sykepengegrunnlag, sisteUtbetalingsdato)
 
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
@@ -30,22 +30,22 @@ class BeregningTest {
    }
 
    @Test
-   fun `dagsats skal forbli uendret når sykmeldingsgraden er 100 prosent`() {
+   fun `dagsats er sykepengegrunnlaget delt på 260`() {
       val fom = LocalDate.parse("2019-01-01") // tirsdag
       val grad = 100
 
       val søknad = Søknad(fom)
 
-      val dagsats = 600L
+      val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-02")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, dagsats, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, sykepengegrunnlag, sisteUtbetalingsdato)
 
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
       assertEquals(2, ut.size)
-      assertEquals(BigDecimal(dagsats), ut[0].sats)
-      assertEquals(BigDecimal(dagsats), ut[1].sats)
+      assertEquals(BigDecimal(sykepengegrunnlag).divide(BigDecimal(260)), ut[0].sats)
+      assertEquals(BigDecimal(sykepengegrunnlag).divide(BigDecimal(260)), ut[1].sats)
    }
 
    @Test
@@ -55,10 +55,10 @@ class BeregningTest {
 
       val søknad = Søknad(fom)
 
-      val dagsats = 600L
+      val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, dagsats, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, sykepengegrunnlag, sisteUtbetalingsdato)
 
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
@@ -66,40 +66,23 @@ class BeregningTest {
    }
 
    @Test
-   fun `grad påvirker dagsats`() {
+   fun `dagsats skal reduseres med sykmeldingsgrad`() {
       val fom = LocalDate.parse("2019-01-01") // tirsdag
       val grad = 50
 
       val søknad = Søknad(fom)
 
-      val dagsats = 600L
+      val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, dagsats, sisteUtbetalingsdato)
-
-
-      val ut: List<Dagsats> = beregn(inndataTilBeregning)
-      for (dagsats in ut) {
-         assertEquals(BigDecimal(300), dagsats.sats)
-      }
-   }
-
-   @Test
-   fun `dagsats blir ikke rundet ned eller opp`() {
-      val fom = LocalDate.parse("2019-01-01") // tirsdag
-      val grad = 50
-
-      val søknad = Søknad(fom)
-
-      val dagsats = 601L
-
-      val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, dagsats, sisteUtbetalingsdato)
-
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, sykepengegrunnlag, sisteUtbetalingsdato)
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
+
+      val gradIProsent = BigDecimal(grad).divide(BigDecimal(100))
+      val utregnetDagsats = BigDecimal(sykepengegrunnlag).divide(BigDecimal(260)).multiply(gradIProsent)
       for (dagsats in ut) {
-         assertEquals(BigDecimal.valueOf(300.5), dagsats.sats)
+         assertEquals(utregnetDagsats, dagsats.sats)
       }
    }
 
@@ -113,10 +96,10 @@ class BeregningTest {
 
       val søknad = Søknad(fom, Ferie(ferieFom, ferieTom))
 
-      val dagsats = 600L
+      val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, dagsats, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, sykepengegrunnlag, sisteUtbetalingsdato)
 
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
@@ -141,10 +124,10 @@ class BeregningTest {
 
       val søknad = Søknad(fom, null, Permisjon(permisjonFom, permisjonTom))
 
-      val dagsats = 600L
+      val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, dagsats, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, sykepengegrunnlag, sisteUtbetalingsdato)
 
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
