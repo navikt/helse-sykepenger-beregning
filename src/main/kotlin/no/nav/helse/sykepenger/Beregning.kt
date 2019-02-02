@@ -1,13 +1,17 @@
 package no.nav.helse.sykepenger
 
 import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
+val sykepengegrunnlagkvotient = BigDecimal.ONE.divide(BigDecimal(260), MathContext.DECIMAL128)
+
 fun beregn(beregningsgrunnlag: Beregningsgrunnlag): List<Dagsats> {
-    val dagsats = beregnDagsats(beregningsgrunnlag.sykepengegrunnlag/*, beregningsgrunnlag.grunnbeløp*/)
+    val dagsats = beregnDagsats(beregningsgrunnlag.sykepengegrunnlag, beregningsgrunnlag.grunnbeløp)
     return finnPeriode(beregningsgrunnlag.søknad.fom, beregningsgrunnlag.sisteUtbetalingsdato)
             .fjernHelgedager()
             .settDagsats(dagsats)
@@ -21,8 +25,14 @@ internal fun Stream<LocalDate>.fjernHelgedager() = filter { date ->
     date.dayOfWeek != DayOfWeek.SATURDAY && date.dayOfWeek != DayOfWeek.SUNDAY
 }
 
-internal fun beregnDagsats(sykepengegrunnlag: Long): BigDecimal {
-    return BigDecimal(sykepengegrunnlag).divide(BigDecimal(260))
+internal fun beregnDagsats(sykepengegrunnlag: Long, grunnbeløp: Long): BigDecimal {
+    val begrensetSykepengegrunnlag = begrensSykepengegrunnlag(sykepengegrunnlag, grunnbeløp)
+    return BigDecimal.valueOf(begrensetSykepengegrunnlag)
+            .multiply(sykepengegrunnlagkvotient).setScale(2, RoundingMode.HALF_UP)
+}
+
+internal fun begrensSykepengegrunnlag(sykepengegrunnlag: Long, grunnbeløp: Long): Long {
+    return Math.min(sykepengegrunnlag, 6*grunnbeløp)
 }
 
 internal fun Stream<LocalDate>.settDagsats(dagsats: BigDecimal): Stream<Dagsats> {
@@ -38,10 +48,12 @@ internal fun Stream<Dagsats>.avkortning(beregningsgrunnlag: Beregningsgrunnlag):
 }
 
 internal fun Stream<Dagsats>.avkortSykmeldingsgrad(sykmeldingsgrad: Int): Stream<Dagsats> {
-    val sykmeldingsgradSomProsent = BigDecimal(sykmeldingsgrad).divide(BigDecimal(100))
+    val sykmeldingsgradkvotient = BigDecimal(sykmeldingsgrad)
+            .divide(BigDecimal(100))
     return map {dagsats ->
         if (sykmeldingsgrad < 100) {
-            val sats = dagsats.sats.times(sykmeldingsgradSomProsent)
+            val sats = dagsats.sats.multiply(sykmeldingsgradkvotient)
+                    .setScale(2, RoundingMode.HALF_UP)
             dagsats.copy(sats = sats)
         } else {
             dagsats
