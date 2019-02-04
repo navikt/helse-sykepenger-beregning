@@ -1,14 +1,13 @@
 package no.nav.helse.sykepenger
 
 import java.math.BigDecimal
-import java.math.MathContext
 import java.math.RoundingMode
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
-val sykepengegrunnlagkvotient = BigDecimal.ONE.divide(BigDecimal(260), MathContext.DECIMAL128)
+val sykepengegrunnlagdivisor = 260
 
 fun beregn(beregningsgrunnlag: Beregningsgrunnlag): List<Dagsats> {
     val dagsats = beregnDagsats(beregningsgrunnlag.sykepengegrunnlag)
@@ -25,12 +24,12 @@ internal fun Stream<LocalDate>.fjernHelgedager() = filter { date ->
     date.dayOfWeek != DayOfWeek.SATURDAY && date.dayOfWeek != DayOfWeek.SUNDAY
 }
 
-internal fun beregnDagsats(sykepengegrunnlag: Sykepengegrunnlag): BigDecimal {
+internal fun beregnDagsats(sykepengegrunnlag: Sykepengegrunnlag): Long {
     return BigDecimal.valueOf(sykepengegrunnlag.sykepengegrunnlag)
-            .multiply(sykepengegrunnlagkvotient).setScale(2, RoundingMode.HALF_UP)
+            .divide(BigDecimal(sykepengegrunnlagdivisor), 0, RoundingMode.HALF_UP).longValueExact()
 }
 
-internal fun Stream<LocalDate>.settDagsats(dagsats: BigDecimal): Stream<Dagsats> {
+internal fun Stream<LocalDate>.settDagsats(dagsats: Long): Stream<Dagsats> {
     return map {dato ->
         Dagsats(dato, dagsats, true)
     }
@@ -43,12 +42,9 @@ internal fun Stream<Dagsats>.avkortning(beregningsgrunnlag: Beregningsgrunnlag):
 }
 
 internal fun Stream<Dagsats>.avkortSykmeldingsgrad(sykmeldingsgrad: Int): Stream<Dagsats> {
-    val sykmeldingsgradkvotient = BigDecimal(sykmeldingsgrad)
-            .divide(BigDecimal(100))
     return map {dagsats ->
         if (sykmeldingsgrad < 100) {
-            val sats = dagsats.sats.multiply(sykmeldingsgradkvotient)
-                    .setScale(2, RoundingMode.HALF_UP)
+            val sats = BigDecimal(dagsats.sats * sykmeldingsgrad).divide(BigDecimal(100),0, RoundingMode.HALF_UP).longValueExact()
             dagsats.copy(sats = sats)
         } else {
             dagsats

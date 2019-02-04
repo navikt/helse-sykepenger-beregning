@@ -2,7 +2,6 @@ package no.nav.helse.sykepenger
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
 
 class BeregnDagsatsTest {
 
@@ -12,16 +11,16 @@ class BeregnDagsatsTest {
         val grunnbeløp = 50L
         val dagsats = beregnDagsats(Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp))
 
-        assertEquals(BigDecimal("1.00"), dagsats)
+        assertEquals(1, dagsats)
     }
 
     @Test
-    fun `dagsats skal runde av til nærmeste øre`() {
+    fun `dagsats skal runde av til nærmeste krone`() {
         val sykepengegrunnlag = 300L
         val grunnbeløp = 50L
         val dagsats = beregnDagsats(Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp))
 
-        assertEquals(BigDecimal("1.15"), dagsats)
+        assertEquals(1, dagsats)
     }
 
     @Test
@@ -30,7 +29,7 @@ class BeregnDagsatsTest {
         val grunnbeløp = 50L
         val dagsats = beregnDagsats(Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp))
 
-        assertEquals(BigDecimal("1.15"), dagsats)
+        assertEquals(1, dagsats)
     }
 
     @Test

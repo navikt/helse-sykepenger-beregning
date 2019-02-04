@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.time.LocalDate
 
 class BeregningTest {
@@ -47,7 +45,7 @@ class BeregningTest {
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
 
-      val forventetSats = BigDecimal("1000.00")
+      val forventetSats = 1000L
       assertEquals(2, ut.size)
       assertEquals(forventetSats, ut[0].sats)
       assertEquals(forventetSats, ut[1].sats)
@@ -86,7 +84,7 @@ class BeregningTest {
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
 
-      val forventetSats = BigDecimal("500.00")
+      val forventetSats = 500L
       for (dagsats in ut) {
          assertEquals(forventetSats, dagsats.sats)
       }
@@ -107,8 +105,7 @@ class BeregningTest {
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
 
-      val forventetSats = BigDecimal(grunnbeløp).multiply(BigDecimal(6))
-              .divide(BigDecimal(260), 2, RoundingMode.HALF_UP)
+      val forventetSats = Math.round(6*grunnbeløp / 260.toDouble())
       for (dagsats in ut) {
          assertEquals(forventetSats, dagsats.sats)
       }
