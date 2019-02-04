@@ -91,6 +91,27 @@ class BeregningTest {
    }
 
    @Test
+   fun `dagsats skal rundes av til nærmeste krone`() {
+      val fom = LocalDate.parse("2019-01-01") // tirsdag
+      val grad = 50
+
+      val søknad = Søknad(fom)
+
+      val grunnbeløp = 96883L
+      val sykepengegrunnlag = 260300L
+
+      val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+
+      val ut: List<Dagsats> = beregn(inndataTilBeregning)
+
+      val forventetSats = 501L
+      for (dagsats in ut) {
+         assertEquals(forventetSats, dagsats.sats)
+      }
+   }
+
+   @Test
    fun `sykepengegrunnlaget skal begrenses til 6G`() {
       val fom = LocalDate.parse("2019-01-01") // tirsdag
       val grad = 100

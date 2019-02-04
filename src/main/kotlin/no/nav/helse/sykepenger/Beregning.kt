@@ -26,7 +26,8 @@ internal fun Stream<LocalDate>.fjernHelgedager() = filter { date ->
 
 internal fun beregnDagsats(sykepengegrunnlag: Sykepengegrunnlag): Long {
     return BigDecimal.valueOf(sykepengegrunnlag.sykepengegrunnlag)
-            .divide(BigDecimal(sykepengegrunnlagdivisor), 0, RoundingMode.HALF_UP).longValueExact()
+       .divide(BigDecimal(sykepengegrunnlagdivisor), 0, RoundingMode.HALF_UP)
+       .longValueExact()
 }
 
 internal fun Stream<LocalDate>.settDagsats(dagsats: Long): Stream<Dagsats> {
@@ -44,7 +45,8 @@ internal fun Stream<Dagsats>.avkortning(beregningsgrunnlag: Beregningsgrunnlag):
 internal fun Stream<Dagsats>.avkortSykmeldingsgrad(sykmeldingsgrad: Int): Stream<Dagsats> {
     return map {dagsats ->
         if (sykmeldingsgrad < 100) {
-            val sats = BigDecimal(dagsats.sats * sykmeldingsgrad).divide(BigDecimal(100),0, RoundingMode.HALF_UP).longValueExact()
+            val sats = BigDecimal(dagsats.sats).percentage(sykmeldingsgrad)
+               .longValueExact(RoundingMode.HALF_UP)
             dagsats.copy(sats = sats)
         } else {
             dagsats
