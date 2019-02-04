@@ -10,7 +10,7 @@ class BeregnDagsatsTest {
     fun `dagsats skal utgjøre sykepengegrunnlaget delt på 260`() {
         val sykepengegrunnlag = 260L
         val grunnbeløp = 50L
-        val dagsats = beregnDagsats(sykepengegrunnlag, grunnbeløp)
+        val dagsats = beregnDagsats(Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp))
 
         assertEquals(BigDecimal("1.00"), dagsats)
     }
@@ -19,7 +19,7 @@ class BeregnDagsatsTest {
     fun `dagsats skal runde av til nærmeste øre`() {
         val sykepengegrunnlag = 300L
         val grunnbeløp = 50L
-        val dagsats = beregnDagsats(sykepengegrunnlag, grunnbeløp)
+        val dagsats = beregnDagsats(Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp))
 
         assertEquals(BigDecimal("1.15"), dagsats)
     }
@@ -28,18 +28,18 @@ class BeregnDagsatsTest {
     fun `sykepengegrunnlaget kan ikke overstige seks ganger grunnbeløpet`() {
         val sykepengegrunnlag = 3000L
         val grunnbeløp = 50L
-        val dagsats = beregnDagsats(sykepengegrunnlag, grunnbeløp)
+        val dagsats = beregnDagsats(Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp))
 
         assertEquals(BigDecimal("1.15"), dagsats)
     }
 
     @Test
     fun `sykepengegrunnlaget kan være mindre enn 6G`() {
-        assertEquals(500, begrensSykepengegrunnlag(500, 100))
+        assertEquals(500, Sykepengegrunnlag(500, 100).sykepengegrunnlag)
     }
 
     @Test
     fun `sykepengegrunnlaget kan ikke være mer enn 6G`() {
-        assertEquals(600, begrensSykepengegrunnlag(601, 100))
+        assertEquals(600, Sykepengegrunnlag(601, 100).sykepengegrunnlag)
     }
 }

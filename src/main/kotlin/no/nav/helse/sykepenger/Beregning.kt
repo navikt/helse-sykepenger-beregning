@@ -11,7 +11,7 @@ import java.util.stream.Stream
 val sykepengegrunnlagkvotient = BigDecimal.ONE.divide(BigDecimal(260), MathContext.DECIMAL128)
 
 fun beregn(beregningsgrunnlag: Beregningsgrunnlag): List<Dagsats> {
-    val dagsats = beregnDagsats(beregningsgrunnlag.sykepengegrunnlag, beregningsgrunnlag.grunnbeløp)
+    val dagsats = beregnDagsats(beregningsgrunnlag.sykepengegrunnlag)
     return finnPeriode(beregningsgrunnlag.søknad.fom, beregningsgrunnlag.sisteUtbetalingsdato)
             .fjernHelgedager()
             .settDagsats(dagsats)
@@ -25,14 +25,9 @@ internal fun Stream<LocalDate>.fjernHelgedager() = filter { date ->
     date.dayOfWeek != DayOfWeek.SATURDAY && date.dayOfWeek != DayOfWeek.SUNDAY
 }
 
-internal fun beregnDagsats(sykepengegrunnlag: Long, grunnbeløp: Long): BigDecimal {
-    val begrensetSykepengegrunnlag = begrensSykepengegrunnlag(sykepengegrunnlag, grunnbeløp)
-    return BigDecimal.valueOf(begrensetSykepengegrunnlag)
+internal fun beregnDagsats(sykepengegrunnlag: Sykepengegrunnlag): BigDecimal {
+    return BigDecimal.valueOf(sykepengegrunnlag.sykepengegrunnlag)
             .multiply(sykepengegrunnlagkvotient).setScale(2, RoundingMode.HALF_UP)
-}
-
-internal fun begrensSykepengegrunnlag(sykepengegrunnlag: Long, grunnbeløp: Long): Long {
-    return Math.min(sykepengegrunnlag, 6*grunnbeløp)
 }
 
 internal fun Stream<LocalDate>.settDagsats(dagsats: BigDecimal): Stream<Dagsats> {

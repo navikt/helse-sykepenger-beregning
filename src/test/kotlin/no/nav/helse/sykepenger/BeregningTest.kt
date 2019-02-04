@@ -21,7 +21,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-02")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, sykepengegrunnlag, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
@@ -42,7 +42,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-02")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, sykepengegrunnlag, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
@@ -64,7 +64,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, sykepengegrunnlag, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
@@ -82,7 +82,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, sykepengegrunnlag, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
 
@@ -103,7 +103,7 @@ class BeregningTest {
       val sykepengegrunnlag = 600000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, sykepengegrunnlag, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
 
@@ -128,7 +128,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, sykepengegrunnlag, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
@@ -157,7 +157,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, sykepengegrunnlag, sisteUtbetalingsdato)
+      val inndataTilBeregning = Beregningsgrunnlag(søknad, grunnbeløp, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
       val ut: List<Dagsats> = beregn(inndataTilBeregning)
