@@ -1,10 +1,8 @@
 package no.nav.helse.sykepenger
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
-import java.time.LocalDate
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.*
+import java.time.*
 
 class BeregningTest {
 
@@ -19,14 +17,15 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-02")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
+      val expected = listOf(
+         Dagsats(LocalDate.parse("2019-01-01"), 1000,  true),
+         Dagsats(LocalDate.parse("2019-01-02"), 1000,  true)
+      )
+      val actual: List<Dagsats> = beregn(grunnlag)
 
-      val ut: List<Dagsats> = beregn(inndataTilBeregning)
-
-      assertTrue(ut.isNotEmpty())
-      assertEquals(fom, ut[0].dato)
-      assertEquals(sisteUtbetalingsdato, ut[ut.size - 1].dato)
+      assertEquals(expected, actual)
    }
 
    @Test
@@ -40,15 +39,15 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-02")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
+      val expected = listOf(
+         Dagsats(LocalDate.parse("2019-01-01"), 1000,  true),
+         Dagsats(LocalDate.parse("2019-01-02"), 1000,  true)
+      )
+      val actual: List<Dagsats> = beregn(grunnlag)
 
-      val ut: List<Dagsats> = beregn(inndataTilBeregning)
-
-      val forventetSats = 1000L
-      assertEquals(2, ut.size)
-      assertEquals(forventetSats, ut[0].sats)
-      assertEquals(forventetSats, ut[1].sats)
+      assertEquals(expected, actual)
    }
 
    @Test
@@ -62,11 +61,11 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
-      val ut: List<Dagsats> = beregn(inndataTilBeregning)
-      assertEquals(6, ut.size)
+      val beregnet: List<Dagsats> = beregn(grunnlag)
+      assertEquals(6, beregnet.size)
    }
 
    @Test
@@ -80,14 +79,12 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
-      val ut: List<Dagsats> = beregn(inndataTilBeregning)
+      val beregnet: List<Dagsats> = beregn(grunnlag)
 
       val forventetSats = 500L
-      for (dagsats in ut) {
-         assertEquals(forventetSats, dagsats.sats)
-      }
+      beregnet.forEach { assertEquals(forventetSats, it.sats) }
    }
 
    @Test
@@ -101,14 +98,12 @@ class BeregningTest {
       val sykepengegrunnlag = 260300L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
-      val ut: List<Dagsats> = beregn(inndataTilBeregning)
+      val beregnet: List<Dagsats> = beregn(grunnlag)
 
       val forventetSats = 501L
-      for (dagsats in ut) {
-         assertEquals(forventetSats, dagsats.sats)
-      }
+      beregnet.forEach { assertEquals(forventetSats, it.sats) }
    }
 
    @Test
@@ -122,14 +117,12 @@ class BeregningTest {
       val sykepengegrunnlag = 600000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
-      val ut: List<Dagsats> = beregn(inndataTilBeregning)
+      val beregnet: List<Dagsats> = beregn(grunnlag)
 
       val forventetSats = Math.round(6*grunnbeløp / 260.toDouble())
-      for (dagsats in ut) {
-         assertEquals(forventetSats, dagsats.sats)
-      }
+      beregnet.forEach { assertEquals(forventetSats, it.sats) }
    }
 
    @Test
@@ -146,19 +139,20 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
-      val ut: List<Dagsats> = beregn(inndataTilBeregning)
-      assertEquals(6, ut.size)
-
-      assertTrue(ut[0].skalUtbetales) // tirsdag
-      assertTrue(ut[1].skalUtbetales) // onsdag
-      assertTrue(ut[2].skalUtbetales) // torsdag
-      assertTrue(ut[3].skalUtbetales) // fredag
-      // helg bortfaller fra resultatet
-      assertFalse(ut[4].skalUtbetales) // mandag, ferie utbetales ikke
-      assertTrue(ut[5].skalUtbetales) // tirsdag
+      val expected = listOf(
+         Dagsats(LocalDate.parse("2019-01-01"), 1000,  true),
+         Dagsats(LocalDate.parse("2019-01-02"), 1000,  true),
+         Dagsats(LocalDate.parse("2019-01-03"), 1000,  true),
+         Dagsats(LocalDate.parse("2019-01-04"), 1000,  true),
+         // 7/1 ferie
+         Dagsats(LocalDate.parse("2019-01-07"), 1000,  false),
+         Dagsats(LocalDate.parse("2019-01-08"), 1000,  true)
+      )
+      val actual: List<Dagsats> = beregn(grunnlag)
+      assertEquals(expected, actual)
    }
 
    @Test
@@ -175,18 +169,19 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val inndataTilBeregning = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
-      val ut: List<Dagsats> = beregn(inndataTilBeregning)
-      assertEquals(6, ut.size)
-
-      assertTrue(ut[0].skalUtbetales) // tirsdag
-      assertTrue(ut[1].skalUtbetales) // onsdag
-      assertTrue(ut[2].skalUtbetales) // torsdag
-      assertTrue(ut[3].skalUtbetales) // fredag
-      // helg bortfaller fra resultatet
-      assertFalse(ut[4].skalUtbetales) // mandag, permisjon utbetales ikke
-      assertTrue(ut[5].skalUtbetales) // tirsdag
+      val expected = listOf(
+         Dagsats(LocalDate.parse("2019-01-01"), 1000,  true),
+         Dagsats(LocalDate.parse("2019-01-02"), 1000,  true),
+         Dagsats(LocalDate.parse("2019-01-03"), 1000,  true),
+         Dagsats(LocalDate.parse("2019-01-04"), 1000,  true),
+         // 7/1 permisjon
+         Dagsats(LocalDate.parse("2019-01-07"), 1000,  false),
+         Dagsats(LocalDate.parse("2019-01-08"), 1000,  true)
+      )
+      val actual: List<Dagsats> = beregn(grunnlag)
+      assertEquals(expected, actual)
    }
 }
