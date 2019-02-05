@@ -3,6 +3,10 @@ helse-sykepenger-beregning [![Maven Central](https://maven-badges.herokuapp.com/
 
 Logikk for å beregnet sykepenger
 
+## Versjonering
+
+Biblioteket versjoneres på formen: `$lovversjon.$commitSha`.
+
 ## Henvendelser
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub.
