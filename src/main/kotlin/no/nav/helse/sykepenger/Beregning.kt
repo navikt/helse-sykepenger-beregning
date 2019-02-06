@@ -1,20 +1,30 @@
 package no.nav.helse.sykepenger
 
-import java.math.*
-import java.time.*
-import java.time.temporal.ChronoUnit.*
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit.DAYS
 
 val arbeidsdagerPrÅr = 260
 
-fun beregn(beregningsgrunnlag: Beregningsgrunnlag): List<Dagsats> {
+fun beregn(beregningsgrunnlag: Beregningsgrunnlag): Beregningsresultat {
    val dagsats = beregnDagsats(beregningsgrunnlag.sykepengegrunnlag)
 
+   val delresultater = mutableListOf<Delresultat>()
+
    return finnPeriode(beregningsgrunnlag.søknad.fom, beregningsgrunnlag.sisteUtbetalingsdato)
-      .filterNot(::erHelg)
       .map { Dagsats(it, dagsats, true) }
+      .also { delresultater.add(Delresultat(it, "Når trygden yter sykepenger, utgjør sykepengegrunnlaget pr. dag 1/260 av sykepengegrunnlaget pr. år.", "§ 8-10 tredje ledd")) }
+      .filterNot(::erHelg)
+      .also { delresultater.add(Delresultat(it, "Trygden yter sykepenger for alle dagene i uken unntatt lørdag og søndag.", "§ 8-11")) }
       .map { avkortFravær(it, beregningsgrunnlag.søknad.permisjon) }
+      .also { delresultater.add(Delresultat(it, "Det ytes ikke sykepenger fra trygden under lovbestemt ferie etter lov 29. april 1988 nr. 21 om ferie § 5 og permisjon, se også § 8-3 tredje ledd.", "§ 8-17 andre ledd")) }
       .map { avkortFravær(it, beregningsgrunnlag.søknad.ferie) }
+      .also { delresultater.add(Delresultat(it, "Det ytes ikke sykepenger fra trygden under lovbestemt ferie etter lov 29. april 1988 nr. 21 om ferie § 5 og permisjon, se også § 8-3 tredje ledd.", "§ 8-17 andre ledd")) }
       .map { avkortSykmeldingsgrad(beregningsgrunnlag.sykmeldingsgrad, it) }
+      .also { delresultater.add(Delresultat(it, "Sykepengenes størrelse skal beregnes på grunnlag av reduksjon i arbeidstiden og/eller inntektstap.", "§ 8-13 andre ledd")) }
+      .let { Beregningsresultat(it, delresultater.toList()) }
 }
 
 internal fun beregnDagsats(sykepengegrunnlag: Sykepengegrunnlag) =
@@ -25,8 +35,8 @@ internal fun beregnDagsats(sykepengegrunnlag: Sykepengegrunnlag) =
 private fun finnPeriode(fom: LocalDate, tom: LocalDate) =
    (0 .. DAYS.between(fom, tom)).map { fom.plusDays(it) }
 
-private fun erHelg(dag: LocalDate) =
-    dag.dayOfWeek == DayOfWeek.SATURDAY || dag.dayOfWeek == DayOfWeek.SUNDAY
+private fun erHelg(dagsats: Dagsats) =
+    dagsats.dato.dayOfWeek == DayOfWeek.SATURDAY || dagsats.dato.dayOfWeek == DayOfWeek.SUNDAY
 
 private fun avkortSykmeldingsgrad(sykmeldingsgrad: Int, dagsats: Dagsats): Dagsats {
    return if (sykmeldingsgrad < 100) {

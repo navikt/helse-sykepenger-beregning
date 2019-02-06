@@ -23,7 +23,7 @@ class BeregningTest {
          Dagsats(LocalDate.parse("2019-01-01"), 1000,  true),
          Dagsats(LocalDate.parse("2019-01-02"), 1000,  true)
       )
-      val actual: List<Dagsats> = beregn(grunnlag)
+      val actual: List<Dagsats> = beregn(grunnlag).dagsatser
 
       assertEquals(expected, actual)
    }
@@ -42,7 +42,7 @@ class BeregningTest {
       val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
-      val beregnet: List<Dagsats> = beregn(grunnlag)
+      val beregnet: List<Dagsats> = beregn(grunnlag).dagsatser
       assertEquals(6, beregnet.size)
    }
 
@@ -59,7 +59,7 @@ class BeregningTest {
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
       val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
-      val beregnet: List<Dagsats> = beregn(grunnlag)
+      val beregnet: List<Dagsats> = beregn(grunnlag).dagsatser
 
       val forventetSats = 500L
       beregnet.forEach { assertEquals(forventetSats, it.sats) }
@@ -78,7 +78,7 @@ class BeregningTest {
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
       val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
-      val beregnet: List<Dagsats> = beregn(grunnlag)
+      val beregnet: List<Dagsats> = beregn(grunnlag).dagsatser
 
       val forventetSats = 501L
       beregnet.forEach { assertEquals(forventetSats, it.sats) }
@@ -97,7 +97,7 @@ class BeregningTest {
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
       val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
-      val beregnet: List<Dagsats> = beregn(grunnlag)
+      val beregnet: List<Dagsats> = beregn(grunnlag).dagsatser
 
       val forventetSats = Math.round(6*grunnbeløp / 260.toDouble())
       beregnet.forEach { assertEquals(forventetSats, it.sats) }
@@ -129,7 +129,7 @@ class BeregningTest {
          Dagsats(LocalDate.parse("2019-01-07"), 1000,  false),
          Dagsats(LocalDate.parse("2019-01-08"), 1000,  true)
       )
-      val actual: List<Dagsats> = beregn(grunnlag)
+      val actual: List<Dagsats> = beregn(grunnlag).dagsatser
       assertEquals(expected, actual)
    }
 
@@ -159,7 +159,7 @@ class BeregningTest {
          Dagsats(LocalDate.parse("2019-01-07"), 1000,  false),
          Dagsats(LocalDate.parse("2019-01-08"), 1000,  true)
       )
-      val actual: List<Dagsats> = beregn(grunnlag)
+      val actual: List<Dagsats> = beregn(grunnlag).dagsatser
       assertEquals(expected, actual)
    }
 }
