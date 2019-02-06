@@ -1,35 +1,13 @@
 package no.nav.helse.sykepenger
 
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
-import java.time.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import java.time.LocalDate
 
 class BeregningTest {
 
    @Test
-   fun `første og siste dato skal være fom og sisteUtbetalingsdato`() {
-      val fom = LocalDate.parse("2019-01-01") // tirsdag
-      val grad = 100
-
-      val søknad = Søknad(fom)
-
-      val grunnbeløp = 96883L
-      val sykepengegrunnlag = 260000L
-
-      val sisteUtbetalingsdato = LocalDate.parse("2019-01-02")
-      val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
-
-      val expected = listOf(
-         Dagsats(LocalDate.parse("2019-01-01"), 1000,  true),
-         Dagsats(LocalDate.parse("2019-01-02"), 1000,  true)
-      )
-      val actual: List<Dagsats> = beregn(grunnlag)
-
-      assertEquals(expected, actual)
-   }
-
-   @Test
-   fun `dagsats er sykepengegrunnlaget delt på 260`() {
+   fun `når grad er 100 skal dagsats være sykepengegrunnlag delt på 260, i perioden det søkes for`() {
       val fom = LocalDate.parse("2019-01-01") // tirsdag
       val grad = 100
 
