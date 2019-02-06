@@ -1,4 +1,4 @@
-package no.nav.helse.sykepenger
+package no.nav.helse.sykepenger.beregning
 
 import java.math.BigDecimal
 import java.math.RoundingMode

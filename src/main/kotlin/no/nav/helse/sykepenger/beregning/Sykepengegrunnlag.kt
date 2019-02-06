@@ -1,4 +1,4 @@
-package no.nav.helse.sykepenger
+package no.nav.helse.sykepenger.beregning
 
 data class Sykepengegrunnlag(val fastsattInntekt: Long, val grunnbeløp: Long) {
 

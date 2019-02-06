@@ -1,4 +1,4 @@
-package no.nav.helse.sykepenger
+package no.nav.helse.sykepenger.beregning
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -20,8 +20,8 @@ class BeregningTest {
       val grunnlag = Beregningsgrunnlag(søknad, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
       val expected = listOf(
-         Dagsats(LocalDate.parse("2019-01-01"), 1000,  true),
-         Dagsats(LocalDate.parse("2019-01-02"), 1000,  true)
+         Dagsats(LocalDate.parse("2019-01-01"), 1000, true),
+         Dagsats(LocalDate.parse("2019-01-02"), 1000, true)
       )
       val actual: List<Dagsats> = beregn(grunnlag).dagsatser
 
@@ -121,13 +121,13 @@ class BeregningTest {
 
 
       val expected = listOf(
-         Dagsats(LocalDate.parse("2019-01-01"), 1000,  true),
-         Dagsats(LocalDate.parse("2019-01-02"), 1000,  true),
-         Dagsats(LocalDate.parse("2019-01-03"), 1000,  true),
-         Dagsats(LocalDate.parse("2019-01-04"), 1000,  true),
+         Dagsats(LocalDate.parse("2019-01-01"), 1000, true),
+         Dagsats(LocalDate.parse("2019-01-02"), 1000, true),
+         Dagsats(LocalDate.parse("2019-01-03"), 1000, true),
+         Dagsats(LocalDate.parse("2019-01-04"), 1000, true),
          // 7/1 ferie
-         Dagsats(LocalDate.parse("2019-01-07"), 1000,  false),
-         Dagsats(LocalDate.parse("2019-01-08"), 1000,  true)
+         Dagsats(LocalDate.parse("2019-01-07"), 1000, false),
+         Dagsats(LocalDate.parse("2019-01-08"), 1000, true)
       )
       val actual: List<Dagsats> = beregn(grunnlag).dagsatser
       assertEquals(expected, actual)
@@ -151,13 +151,13 @@ class BeregningTest {
 
 
       val expected = listOf(
-         Dagsats(LocalDate.parse("2019-01-01"), 1000,  true),
-         Dagsats(LocalDate.parse("2019-01-02"), 1000,  true),
-         Dagsats(LocalDate.parse("2019-01-03"), 1000,  true),
-         Dagsats(LocalDate.parse("2019-01-04"), 1000,  true),
+         Dagsats(LocalDate.parse("2019-01-01"), 1000, true),
+         Dagsats(LocalDate.parse("2019-01-02"), 1000, true),
+         Dagsats(LocalDate.parse("2019-01-03"), 1000, true),
+         Dagsats(LocalDate.parse("2019-01-04"), 1000, true),
          // 7/1 permisjon
-         Dagsats(LocalDate.parse("2019-01-07"), 1000,  false),
-         Dagsats(LocalDate.parse("2019-01-08"), 1000,  true)
+         Dagsats(LocalDate.parse("2019-01-07"), 1000, false),
+         Dagsats(LocalDate.parse("2019-01-08"), 1000, true)
       )
       val actual: List<Dagsats> = beregn(grunnlag).dagsatser
       assertEquals(expected, actual)
