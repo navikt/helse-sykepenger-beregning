@@ -13,14 +13,14 @@ fun beregn(beregningsgrunnlag: Beregningsgrunnlag): Beregningsresultat {
 
    val delresultater = mutableListOf<Delresultat>()
 
-   return finnPeriode(beregningsgrunnlag.søknad.fom, beregningsgrunnlag.sisteUtbetalingsdato)
+   return finnPeriode(beregningsgrunnlag.fom, beregningsgrunnlag.sisteUtbetalingsdato)
       .map { Dagsats(it, dagsats, true) }
       .also { delresultater.add(Delresultat(it, "Når trygden yter sykepenger, utgjør sykepengegrunnlaget pr. dag 1/260 av sykepengegrunnlaget pr. år.", "§ 8-10 tredje ledd")) }
       .filterNot(::erHelg)
       .also { delresultater.add(Delresultat(it, "Trygden yter sykepenger for alle dagene i uken unntatt lørdag og søndag.", "§ 8-11")) }
-      .map { avkortFravær(it, beregningsgrunnlag.søknad.permisjon) }
+      .map { avkortFravær(it, beregningsgrunnlag.permisjon) }
       .also { delresultater.add(Delresultat(it, "Det ytes ikke sykepenger fra trygden under lovbestemt ferie etter lov 29. april 1988 nr. 21 om ferie § 5 og permisjon, se også § 8-3 tredje ledd.", "§ 8-17 andre ledd")) }
-      .map { avkortFravær(it, beregningsgrunnlag.søknad.ferie) }
+      .map { avkortFravær(it, beregningsgrunnlag.ferie) }
       .also { delresultater.add(Delresultat(it, "Det ytes ikke sykepenger fra trygden under lovbestemt ferie etter lov 29. april 1988 nr. 21 om ferie § 5 og permisjon, se også § 8-3 tredje ledd.", "§ 8-17 andre ledd")) }
       .map { avkortSykmeldingsgrad(beregningsgrunnlag.sykmeldingsgrad, it) }
       .also { delresultater.add(Delresultat(it, "Sykepengenes størrelse skal beregnes på grunnlag av reduksjon i arbeidstiden og/eller inntektstap.", "§ 8-13 andre ledd")) }
