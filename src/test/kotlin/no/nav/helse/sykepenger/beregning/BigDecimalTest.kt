@@ -1,7 +1,5 @@
 package no.nav.helse.sykepenger.beregning
 
-import no.nav.helse.sykepenger.beregning.longValueExact
-import no.nav.helse.sykepenger.beregning.percentage
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

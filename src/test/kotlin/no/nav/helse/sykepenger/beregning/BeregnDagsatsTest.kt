@@ -1,7 +1,5 @@
 package no.nav.helse.sykepenger.beregning
 
-import no.nav.helse.sykepenger.beregning.Sykepengegrunnlag
-import no.nav.helse.sykepenger.beregning.beregnDagsats
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
