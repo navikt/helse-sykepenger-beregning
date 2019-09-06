@@ -50,10 +50,18 @@ private fun avkortSykmeldingsgrad(sykmeldingsgrad: Int, dagsats: Dagsats): Dagsa
 private fun avkortFravær(dagsats: Dagsats, fraværsliste: List<Fravær>?): Dagsats {
    if (!fraværsliste.isNullOrEmpty()) {
       fraværsliste.forEach {
-         return if (dagsats.dato >= it.fom && dagsats.dato <= it.tom)
-            dagsats.copy(skalUtbetales = false)
-         else
-            dagsats
+         return when (it.tom) {
+             null ->
+                if (dagsats.dato >= it.fom)
+                   dagsats.copy(skalUtbetales = false)
+                else
+                   dagsats
+             else ->
+                if (dagsats.dato >= it.fom && dagsats.dato <= it.tom)
+                   dagsats.copy(skalUtbetales = false)
+                else
+                   dagsats
+         }
       }
    }
    return dagsats
