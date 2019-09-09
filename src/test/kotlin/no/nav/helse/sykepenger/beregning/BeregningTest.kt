@@ -15,7 +15,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-02")
-      val grunnlag = Beregningsgrunnlag(fom, null, null, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(fom, emptyList(), emptyList(), grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
       val expected = listOf(
          Dagsats(LocalDate.parse("2019-01-01"), 1000, true),
@@ -35,7 +35,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val grunnlag = Beregningsgrunnlag(fom, null, null, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(fom, emptyList(), emptyList(), grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
       val beregnet: List<Dagsats> = beregn(grunnlag).dagsatser
@@ -51,7 +51,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val grunnlag = Beregningsgrunnlag(fom, null, null, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(fom, emptyList(), emptyList(), grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
       val beregnet: List<Dagsats> = beregn(grunnlag).dagsatser
 
@@ -68,7 +68,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260300L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val grunnlag = Beregningsgrunnlag(fom, null, null, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(fom, emptyList(), emptyList(), grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
       val beregnet: List<Dagsats> = beregn(grunnlag).dagsatser
 
@@ -85,7 +85,7 @@ class BeregningTest {
       val sykepengegrunnlag = 600000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val grunnlag = Beregningsgrunnlag(fom, null, null, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(fom, emptyList(), emptyList(), grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
       val beregnet: List<Dagsats> = beregn(grunnlag).dagsatser
 
@@ -105,7 +105,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val grunnlag = Beregningsgrunnlag(fom, Ferie(ferieFom, ferieTom), null, grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(fom, listOf(Ferie(ferieFom, ferieTom)), emptyList(), grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
       val expected = listOf(
@@ -133,7 +133,7 @@ class BeregningTest {
       val sykepengegrunnlag = 260000L
 
       val sisteUtbetalingsdato = LocalDate.parse("2019-01-08")
-      val grunnlag = Beregningsgrunnlag(fom, null, Permisjon(permisjonFom, permisjonTom), grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
+      val grunnlag = Beregningsgrunnlag(fom, emptyList(), listOf(Permisjon(permisjonFom, permisjonTom)), grad, Sykepengegrunnlag(sykepengegrunnlag, grunnbeløp), sisteUtbetalingsdato)
 
 
       val expected = listOf(

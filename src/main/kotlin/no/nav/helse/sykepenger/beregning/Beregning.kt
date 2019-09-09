@@ -33,10 +33,10 @@ internal fun beregnDagsats(sykepengegrunnlag: Sykepengegrunnlag) =
       .longValueExact()
 
 private fun finnPeriode(fom: LocalDate, tom: LocalDate) =
-   (0 .. DAYS.between(fom, tom)).map { fom.plusDays(it) }
+   (0..DAYS.between(fom, tom)).map { fom.plusDays(it) }
 
 private fun erHelg(dagsats: Dagsats) =
-    dagsats.dato.dayOfWeek == DayOfWeek.SATURDAY || dagsats.dato.dayOfWeek == DayOfWeek.SUNDAY
+   dagsats.dato.dayOfWeek == DayOfWeek.SATURDAY || dagsats.dato.dayOfWeek == DayOfWeek.SUNDAY
 
 private fun avkortSykmeldingsgrad(sykmeldingsgrad: Int, dagsats: Dagsats): Dagsats {
    return if (sykmeldingsgrad < 100) {
@@ -47,11 +47,14 @@ private fun avkortSykmeldingsgrad(sykmeldingsgrad: Int, dagsats: Dagsats): Dagsa
    }
 }
 
-private fun avkortFravær(dagsats: Dagsats, fravær: Fravær?): Dagsats {
-   return fravær?.let {
-      if (dagsats.dato >= fravær.fom && dagsats.dato <= fravær.tom)
-         dagsats.copy(skalUtbetales = false)
-      else
-         dagsats
-   } ?: dagsats
+private fun avkortFravær(dagsats: Dagsats, fraværsliste: List<Fravær>?): Dagsats {
+   if (!fraværsliste.isNullOrEmpty()) {
+      fraværsliste.forEach {
+         return if (dagsats.dato >= it.fom && dagsats.dato <= it.tom)
+            dagsats.copy(skalUtbetales = false)
+         else
+            dagsats
+      }
+   }
+   return dagsats
 }
