@@ -31,11 +31,12 @@ jobs:
               java-version: '11.x'
          - name: create version number
            run: |
+              echo $(./mvnw -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec) > .lovverk_version
               echo $(echo $GITHUB_SHA | cut -c1-7) > .version
          - name: test and build
            run: ./mvnw clean install
          - name: set version
-           run: ./mvnw versions:set -DnewVersion="$(cat .version)"
+           run: ./mvnw versions:set -DnewVersion="$(cat .lovverk_version).$(cat .version)"
          - name: upload artifact
            run: ./mvnw --settings settings.xml deploy -X -DskipTests=true
            env:
