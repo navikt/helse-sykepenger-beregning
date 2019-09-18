@@ -12,7 +12,7 @@
    <url>https://github.com/navikt/helse-sykepenger-beregning</url>
 
    <properties>
-      <kotlin.version>1.3.20</kotlin.version>
+      <kotlin.version>1.3.50</kotlin.version>
       <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
       <junit-jupiter.version>5.3.2</junit-jupiter.version>
       <maven.compiler.source>11</maven.compiler.source>
@@ -48,103 +48,31 @@
    <build>
       <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
       <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+
       <plugins>
+
          <plugin>
-            <artifactId>kotlin-maven-plugin</artifactId>
             <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-plugin</artifactId>
             <version>${kotlin.version}</version>
 
             <executions>
                <execution>
                   <id>compile</id>
-                  <goals><goal>compile</goal></goals>
+                  <goals>
+                     <goal>compile</goal>
+                  </goals>
                </execution>
+
                <execution>
                   <id>test-compile</id>
-                  <goals><goal>test-compile</goal></goals>
-               </execution>
-            </executions>
-         </plugin>
-
-         <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>${maven-surefire-plugin.version}</version>
-         </plugin>
-         <plugin>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-               <execution>
-                  <id>include-sources</id>
                   <goals>
-                     <goal>jar-no-fork</goal>
+                     <goal>test-compile</goal>
                   </goals>
                </execution>
             </executions>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.1.0</version>
-            <executions>
-               <execution>
-                  <id>empty-javadoc-jar</id>
-                  <phase>package</phase>
-                  <goals>
-                     <goal>jar</goal>
-                  </goals>
-                  <configuration>
-                     <classifier>javadoc</classifier>
-                     <classesDirectory>${basedir}/src/main/javadoc</classesDirectory>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-release-plugin</artifactId>
-            <version>2.5.3</version>
-            <configuration>
-               <autoVersionSubmodules>true</autoVersionSubmodules>
-               <useReleaseProfile>true</useReleaseProfile>
-               <releaseProfiles>release</releaseProfiles>
-               <goals>deploy</goals>
-            </configuration>
-         </plugin>
-         <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.8</version>
-            <executions>
-               <execution>
-                  <id>default-deploy</id>
-                  <phase>deploy</phase>
-                  <goals>
-                     <goal>deploy</goal>
-                  </goals>
-               </execution>
-            </executions>
-            <configuration>
-               <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-               <serverId>ossrh</serverId>
-               <autoReleaseAfterClose>true</autoReleaseAfterClose>
-            </configuration>
          </plugin>
       </plugins>
-
-      <pluginManagement>
-         <plugins>
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-source-plugin</artifactId>
-               <version>3.0.1</version>
-            </plugin>
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-resources-plugin</artifactId>
-               <version>3.1.0</version>
-            </plugin>
-         </plugins>
-      </pluginManagement>
    </build>
 
    <licenses>
@@ -160,13 +88,10 @@
       </developer>
    </developers>
    <distributionManagement>
-      <snapshotRepository>
-         <id>ossrh</id>
-         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      </snapshotRepository>
       <repository>
-         <id>ossrh</id>
-         <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+         <id>github</id>
+         <name>GitHub navikt Apache Maven Packages</name>
+         <url>https://maven.pkg.github.com/navikt/helse-sykepenger-beregning</url>
       </repository>
    </distributionManagement>
 
@@ -176,28 +101,4 @@
       <url>https://github.com/navikt/helse-sykepenger-beregning</url>
       <tag>HEAD</tag>
    </scm>
-
-   <profiles>
-      <profile>
-         <id>release</id>
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-gpg-plugin</artifactId>
-                  <version>1.6</version>
-                  <executions>
-                     <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                           <goal>sign</goal>
-                        </goals>
-                     </execution>
-                  </executions>
-               </plugin>
-            </plugins>
-         </build>
-      </profile>
-   </profiles>
 </project>
